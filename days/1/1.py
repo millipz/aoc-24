@@ -12,4 +12,5 @@ def aoc_1() -> tuple[int]:
 
     return diff_total, total_sim_score
 
+
 print(aoc_1())
