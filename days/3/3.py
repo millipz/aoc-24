@@ -1,60 +1,48 @@
 def aoc_3(switch=False) -> int:
+    global buffer, char_gen
     char_gen = (char for line in open("days/3/input.txt", "r") for char in line if char)
     START, DELIM, END, ON, OFF = "mul(", ",", ")", "do()", "don't()"
-    a = ""
-    buffer_size = max([len(var) for var in [START, a, DELIM, END, ON, OFF]])
-    print('buffer_size: ', buffer_size)
-    state = "searching"
-    results = []
-
+    state, results, a = "searching", [], ""
+    buffer_size = max(map(len, [START, a, DELIM, END, ON, OFF]))
     buffer = [next(char_gen, None) for _ in range(buffer_size)]
 
-    def match_pattern(buffer, pattern):
+    def match(pattern):
         return buffer[: len(pattern)] == list(pattern)
-    
-    def roll(buffer, gen, repeats=1):
-        for _ in range(repeats):
-            buffer.append(next(gen, None))
+
+    def roll(n=1) -> str:
+        for _ in range(n):
+            buffer.append(next(char_gen, None))
             char = buffer.pop(0)
         return char
-    
-    def get_num(buffer, gen):
+
+    def get_num():
         num = ""
         while buffer[0].isdigit():
-            num += roll(buffer, gen, 1)
+            num += roll()
         return num, buffer[0]
 
     while any(buffer):
-        print(state)
-        print(buffer)
         match state:
             case "off":
-                if match_pattern(buffer, list(ON)):
-                    state = "searching"
-                    roll(buffer, char_gen, len(ON))
-                else:
-                    roll(buffer, char_gen, 1)
+                state, _ = (
+                    ("searching", roll(len(ON))) if match(list(ON)) else ("off", roll())
+                )
             case "searching":
-                if match_pattern(buffer, list(OFF)) and switch:
-                    state = "off"
-                    roll(buffer, char_gen, len(OFF))
-                elif match_pattern(buffer, list(START)):
-                    state = "num"
-                    roll(buffer, char_gen, len(START))
+                if match(list(OFF)) and switch:
+                    state, _ = "off", roll(len(OFF))
+                elif match(list(START)):
+                    state, _ = "num", roll(len(START))
                 else:
-                    roll(buffer, char_gen, 1)
+                    roll()
             case "num":
-                num, char = get_num(buffer,char_gen)
+                num, char = get_num()
                 if not a and char == DELIM:
-                    a = num
-                    roll(buffer, char_gen, 1)
+                    a, _ = num, roll()
                 elif a and char == END:
                     results.append((int(a), int(num)))
-                    a, state = "", "searching"
-                    roll(buffer, char_gen, 1)
+                    a, state, _ = "", "searching", roll()
                 else:
-                    state = "searching"
-                    a = ""
+                    a, state = "", "searching"
 
     return sum([a * b for a, b in results])
 
