@@ -1,4 +1,4 @@
-def aoc_2_1(dampers: int = 0) -> int:
+def aoc_2(dampers: int = 0) -> int:
 
     def is_safe(report: list, lives: int = dampers) -> bool:
         direction = 1 if report[0] < report[1] else -1
@@ -16,5 +16,5 @@ def aoc_2_1(dampers: int = 0) -> int:
     return sum([is_safe(report) for report in reports])
 
 
-print(aoc_2_1())
-print(aoc_2_1(1))
+print(aoc_2())
+print(aoc_2(1))
