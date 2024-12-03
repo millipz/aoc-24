@@ -3,7 +3,7 @@ def aoc_3(switch=False) -> int:
     char_gen = (char for line in open("days/3/input.txt", "r") for char in line if char)
     START, DELIM, END, ON, OFF = "mul(", ",", ")", "do()", "don't()"
     state, results, a = "searching", [], ""
-    buffer_size = max(map(len, [START, a, DELIM, END, ON, OFF]))
+    buffer_size = max(map(len, [START, DELIM, END, ON, OFF]))
     buffer = [next(char_gen, None) for _ in range(buffer_size)]
 
     def match(pattern):
@@ -39,12 +39,12 @@ def aoc_3(switch=False) -> int:
                 if not a and char == DELIM:
                     a, _ = num, roll()
                 elif a and char == END:
-                    results.append((int(a), int(num)))
+                    results.append(int(a) * int(num))
                     a, state, _ = "", "searching", roll()
                 else:
                     a, state = "", "searching"
 
-    return sum([a * b for a, b in results])
+    return sum(results)
 
 
 print(aoc_3())
