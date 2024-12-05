@@ -20,7 +20,8 @@ def aoc_4_search(word, grid):
 
 
 def aoc_4_cross(word, grid):
-    l, words = len(word), word, word[::-1]
+    l = len(word)
+    words = word, word[::-1]
     height = max(row for row, _ in grid) - l + 2
     width = max(col for _, col in grid) - l + 2
     candidates = [
