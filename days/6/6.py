@@ -38,8 +38,6 @@ def aoc_6():
                     "visited": len(set([loc for loc, _ in positions])),
                 }
             elif (next, guard["dir"]) in positions:
-                # print("a loop!")
-                # print({"loop": True, "visited": set([loc for loc, _ in positions])})
                 return {
                     "loop": True,
                     "visited": len(set([loc for loc, _ in positions])),
