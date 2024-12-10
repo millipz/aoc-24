@@ -24,15 +24,12 @@ def aoc_6():
     }
 
     def is_loop(obstacle_loc):
-        # print(f"testing - {obstacle_loc}")
         positions = set()
         guard = {"loc": start, "dir": (-1, 0)}
         while guard:
             positions.add((guard["loc"], guard["dir"]))
             next = tuple(map(sum, zip(guard["loc"], guard["dir"])))
             if next not in grid.keys():
-                # print("off the map!")
-                # print({"loop": False, "visited": set([loc for loc, _ in positions])})
                 return {
                     "loop": False,
                     "visited": len(set([loc for loc, _ in positions])),
